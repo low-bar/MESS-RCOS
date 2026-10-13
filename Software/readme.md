@@ -1,5 +1,5 @@
 fill_db.py 
 
-requires python and lib psycopg installed
+currently python with lib psycopg installed
 
 pip install "psycopg[binary]"
