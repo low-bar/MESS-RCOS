@@ -1,10 +1,4 @@
 /.env
+/software/database/commands.txt
 
 
-# Connect to the PostgreSQL database
-# psql -U mess_user -d mess_rcos
-# select * from light_readings;
-# select recorded_at, light_value from light_readings;
-# INSERT INTO light_readings (light_value) VALUES (%s)
-# drop table light_readings;
-# q to back/(end)

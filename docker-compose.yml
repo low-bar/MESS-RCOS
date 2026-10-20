@@ -2,15 +2,32 @@ services:
   database:
     image: postgres:16
     restart: unless-stopped
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-mess_rcos}
-      POSTGRES_USER: ${POSTGRES_USER:-mess_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./Software/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./software/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  fill-db:
+    build:
+      context: .
+      dockerfile: software/database/Dockerfile
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: database
+    depends_on:
+      database:
+        condition: service_healthy
+    stdin_open: true
+    tty: true
 
 volumes:
   postgres_data:

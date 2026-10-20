@@ -41,10 +41,10 @@ def output_readings(cur, data_type):
 
 def main():
     with psycopg.connect(
-        host="localhost",
+        host=os.getenv("POSTGRES_HOST", "database"),
         port=5432,
-        dbname=os.getenv("POSTGRES_DB", "mess_rcos"),
-        user=os.getenv("POSTGRES_USER", "mess_user"),
+        dbname=os.environ["POSTGRES_DB"],
+        user=os.environ["POSTGRES_USER"],
         password=os.environ["POSTGRES_PASSWORD"],
     ) as conn:
         with conn.cursor() as cur:
