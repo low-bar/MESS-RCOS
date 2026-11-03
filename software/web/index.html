@@ -10,48 +10,21 @@
     <h1>Prototype Table</h1>
     <p>This is a basic table which reflects the current state of the sensor data.</p>
 
+    <select id="value-type">
+        <option value="light">Light</option>
+        <option value="gas">Gas</option>
+        <option value="humid">Humidity</option>
+        <option value="temp">Temperature</option>
+    </select>
+    
     <table id="data-table" border="1" cellpadding="4">
         <thead><tr>
-            <th>ID</th><th>Recorded At</th><th>Light Value</th><th>Sensor ID</th><th>Location</th>
+            <th>ID</th><th>Recorded At</th><th id="value-header">Light Value</th><th>Sensor ID</th><th>Location</th>
         </tr></thead>
         <tbody></tbody>
     </table>
     <p id="status"></p>
 
-    <script>
-        async function loadData() {
-            const tbody = document.querySelector('#data-table tbody');
-            const status = document.getElementById('status');
-            try {
-                const res = await fetch('/api/light');
-                if (!res.ok) throw new Error(res.statusText);
-                const rows = await res.json();
-
-                tbody.innerHTML = '';
-                for (const row of rows) {
-                    const tr = document.createElement('tr');
-                    const cells = [
-                        row.id,
-                        new Date(row.recorded_at).toLocaleString(),
-                        row.light_value,
-                        row.sensor_id,
-                        row.loc,
-                    ];
-                    for (const value of cells) {
-                        const td = document.createElement('td');
-                        td.textContent = value;
-                        tr.appendChild(td);
-                    }
-                    tbody.appendChild(tr);
-                }
-                status.textContent = rows.length ? '' : 'No data yet.';
-            } catch (err) {
-                status.textContent = 'Failed to load data: ' + err.message;
-            }
-        }
-
-        loadData();
-        setInterval(loadData, 5000);
-    </script>
+    <script src="/table.js"></script>
 </body>
 </html>
